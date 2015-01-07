@@ -1,0 +1,78 @@
+<section data-ng-controller="MembersController" data-ng-init="find()">
+
+    <div class="btn-group" dropdown is-open="status.isopen">
+        <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+            <span data-ng-if="team.name" data-ng-bind="team.name"></span>
+            <span data-ng-if="!team.name">Wähle ein Team</span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li role="presentation" data-ng-repeat="team in teams">
+                <a role="menuitem" tabindex="-1" href="#!" data-ng-bind="team.name" data-ng-click="changeTeam($event, team._id)"></a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="row" data-ng-if="team">
+        
+    
+    <div class="col-md-6">
+        <div class="page-header">
+            <h1>Mitglieder von {{team.name}}</h1>
+        </div>
+
+        <div class="list-group">
+            <div class="panel panel-primary" data-ng-repeat="member in team.members">
+                <div class="panel-heading">
+                    <h2 class="panel-title">{{member.firstname}} {{member.lastname}}</h2>
+                </div>
+                <div class="panel-body">
+                    <h5 data-ng-bind=""></h5>
+                     <div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
+                        <a class="btn btn-primary" href="/#!/members/{{member._id}}/edit">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                        <a class="btn btn-primary" data-ng-click="remove(member);">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+    <div class="page-header">
+        <h1>Erstelle einen neuen Member im Team {{team.name}}</h1>
+    </div>
+    <div class="col-md-12">
+        <form class="form-horizontal" data-ng-submit="add()" novalidate>
+            <fieldset>
+                <div class="form-group">
+                    <div class="controls">
+                        <input type="text" data-ng-model="firstname" id="firstname" class="form-control" placeholder="Vorname" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="controls">
+                        <input type="text" data-ng-model="lastname" id="lastname" class="form-control" placeholder="Nachname" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Member hinzufügen">
+                </div>
+                <div data-ng-show="error" class="text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    </div>
+
+    </div>
+    <div class="alert alert-warning text-center" data-ng-hide="!teams.$resolved || teams.length">
+    	No Teams yet, why don't you <a href="/#!/teams/create">create one</a>?
+    </div>
+
+    
+
+</section>

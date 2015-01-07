@@ -1,0 +1,14 @@
+<section data-ng-controller="TeamsController" data-ng-init="findOne()">
+	<div class="page-header">
+		<h1 data-ng-bind="team.name"></h1>
+		<h3 data-ng-bind="team.description"></h3>
+	</div>
+	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
+		<a class="btn btn-primary" href="/#!/teams/{{team._id}}/edit">
+			<i class="glyphicon glyphicon-edit"></i>
+		</a>
+		<a class="btn btn-primary" data-ng-click="remove();">
+			<i class="glyphicon glyphicon-trash"></i>
+		</a>
+	</div>
+</section>

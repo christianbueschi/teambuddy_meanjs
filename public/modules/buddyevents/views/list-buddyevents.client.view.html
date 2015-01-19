@@ -1,5 +1,4 @@
-<section data-ng-controller="MembersController" data-ng-init="find()">
-
+<section data-ng-controller="BuddyeventsController" data-ng-init="init()">
     <div class="btn-group" dropdown is-open="status.isopen">
         <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
             <span data-ng-if="team.name" data-ng-bind="team.name"></span>
@@ -17,7 +16,7 @@
     
     <div class="col-md-6">
         <div class="page-header">
-            <h1>Mitglieder von {{team.name}}</h1>
+            <h1>Events von {{team.name}}</h1>
         </div>
 
         <div class="list-group">
@@ -41,19 +40,19 @@
     </div>
     <div class="col-md-6">
     <div class="page-header">
-        <h1>Erstelle einen neuen Member im Team {{team.name}}</h1>
+        <h1>Erstelle einen neuen Event im Team {{team.name}}</h1>
     </div>
     <div class="col-md-12">
         <form class="form-horizontal" data-ng-submit="add()" novalidate>
             <fieldset>
                 <div class="form-group">
                     <div class="controls">
-                        <input type="text" data-ng-model="firstname" id="firstname" class="form-control" placeholder="Vorname" required>
+                        <input type="text" data-ng-model="title" id="title" class="form-control" placeholder="Titel" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="controls">
-                        <input type="text" data-ng-model="lastname" id="lastname" class="form-control" placeholder="Nachname" required>
+                        <input type="text" data-ng-model="description" id="description" class="form-control" placeholder="Beschreibung" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -69,7 +68,7 @@
 
     </div>
     <div class="alert alert-warning text-center" data-ng-hide="!teams.$resolved || teams.length">
-    	No Teams yet, why don't you <a href="/#!/teams/create">create one</a>?
+        No Teams yet, why don't you <a href="/#!/teams/create">create one</a>?
     </div>
 
     

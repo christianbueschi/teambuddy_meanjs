@@ -1,25 +1,35 @@
 'use strict';
 
 // Teams controller
-angular.module('members').controller('MembersController', ['$scope', '$stateParams', '$location', '$rootScope', 'Authentication', 'Teams',
-	function($scope, $stateParams, $location, $rootScope, Authentication, Teams) {
+angular.module('members').controller('MembersController', ['$scope', '$stateParams', '$location', '$rootScope', 'Authentication', 'Teams', 'Members',
+	function($scope, $stateParams, $location, $rootScope, Authentication, Teams, Members) {
 		$scope.authentication = Authentication;
-
-		var Members = {};
 
 		// Find a list of Teams
 		$scope.find = function() {
 			$scope.teams = Teams.query();
+
+		};
+
+		// Find existing Member
+		$scope.findOne = function() {
+
+			$scope.member = Members.get({ 
+				memberId: $stateParams.memberId
+			});
 		};
 
 		// Update existing Team
 		$scope.add = function() {
-			var team = $scope.team;
+
+			//console.log(this.team);
+			var team = this.team;
 
 			var member = {
 				firstname: this.firstname,
 				lastname: this.lastname
 			};
+
 			team.members.push(member);
 
 			var _this = this;
@@ -27,6 +37,7 @@ angular.module('members').controller('MembersController', ['$scope', '$statePara
 			team.$update(function() {
 				_this.firstname = '';
 				_this.lastname = '';
+
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -34,10 +45,10 @@ angular.module('members').controller('MembersController', ['$scope', '$statePara
 
 		// Update existing Team
 		$scope.update = function() {
-			var team = $scope.team;
+			var member = $scope.member;
 
-			team.$update(function() {
-				$location.path('teams/' + team._id);
+			member.$update(function() {
+				$location.path('members/' + member._id);
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -46,10 +57,15 @@ angular.module('members').controller('MembersController', ['$scope', '$statePara
 		// Remove existing Member
 		$scope.remove = function(member) {
 			var team = $scope.team;
+
+			console.log(team);
 			
 			for (var i in team.members) {
+				console.log(member);
+				console.log(team.members[i]);
 				if (team.members[i] === member) {
 					team.members.splice(i, 1);
+					console.log(true);
 				}
 			}
 
@@ -63,7 +79,6 @@ angular.module('members').controller('MembersController', ['$scope', '$statePara
 		// Change Team by choosing one in the dropdown
 		$scope.changeTeam = function($event, _id) {
 			$event.preventDefault();
-
 			$rootScope.team = Teams.get({ 
 				teamId: _id
 			});

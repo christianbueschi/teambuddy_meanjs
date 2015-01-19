@@ -15,6 +15,7 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
 			// Redirect after save
 			team.$save(function(response) {
+				
 				$location.path('teams');
 
 				// Clear form fields
@@ -57,9 +58,11 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
 		// Find existing Team
 		$scope.findOne = function() {
+
 			$scope.team = Teams.get({ 
 				teamId: $stateParams.teamId
 			});
+
 		};
 
 		// Change Team by choosing one in the dropdown

@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
 
 
 /**
- * Team Schema
+ * Member Schema
  */
 var MemberSchema = new Schema({
 	firstname: {
@@ -22,6 +22,34 @@ var MemberSchema = new Schema({
 		default: '',
 		required: 'Please fill lastname',
 		trim: true
+	},
+	created: {
+		type: Date,
+		default: Date.now
+	},
+	going: {
+		type: Schema.ObjectId,
+		ref: 'Event'
+	},
+});
+
+/**
+ * Happening Schema
+ */
+var BuddyeventSchema = new Schema({
+	title: {
+		type: String,
+		default: '',
+		required: 'Please fill title',
+		trim: true
+	},
+	from: {
+		type: Date,
+		default: ''
+	},
+	to: {
+		type: Date,
+		default: ''
 	}
 });
 
@@ -49,7 +77,10 @@ var TeamSchema = new Schema({
 		type: Schema.ObjectId,
 		ref: 'User'
 	},
-	members: [MemberSchema]
+	members: [MemberSchema],
+	events: [BuddyeventSchema]
 });
 
 mongoose.model('Team', TeamSchema);
+
+mongoose.model('Member', MemberSchema);

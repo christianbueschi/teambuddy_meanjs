@@ -5,102 +5,102 @@
  */
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
-	Team = mongoose.model('Team'),
+	Buddyevent = mongoose.model('Buddyevent'),
 	_ = require('lodash');
 
 /**
- * Create a Team
+ * Create a Buddyevent
  */
 exports.create = function(req, res) {
-	var team = new Team(req.body);
-	team.user = req.user;
+	var buddyevent = new Buddyevent(req.body);
+	buddyevent.user = req.user;
 
-	team.save(function(err) {
+	buddyevent.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(team);
+			res.jsonp(buddyevent);
 		}
 	});
 };
 
 /**
- * Show the current Team
+ * Show the current Buddyevent
  */
 exports.read = function(req, res) {
-	res.jsonp(req.team);
+	res.jsonp(req.buddyevent);
 };
 
 /**
- * Update a Team
+ * Update a Buddyevent
  */
 exports.update = function(req, res) {
-	var team = req.team;
+	var buddyevent = req.buddyevent ;
 
-	team = _.extend(team , req.body);
+	buddyevent = _.extend(buddyevent , req.body);
 
-	team.save(function(err) {
+	buddyevent.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(team);
+			res.jsonp(buddyevent);
 		}
 	});
 };
 
 /**
- * Delete an Team
+ * Delete an Buddyevent
  */
 exports.delete = function(req, res) {
-	var team = req.team;
+	var buddyevent = req.buddyevent ;
 
-	team.remove(function(err) {
+	buddyevent.remove(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(team);
+			res.jsonp(buddyevent);
 		}
 	});
 };
 
 /**
- * List of Teams
+ * List of Buddyevents
  */
 exports.list = function(req, res) { 
-	Team.find().sort('-created').populate('user', 'displayName').exec(function(err, teams) {
+	Buddyevent.find().sort('-created').populate('user', 'displayName').exec(function(err, buddyevents) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(teams);
+			res.jsonp(buddyevents);
 		}
 	});
 };
 
 /**
- * Team middleware
+ * Buddyevent middleware
  */
-exports.teamByID = function(req, res, next, id) { 
-	Team.findById(id).populate('user', 'displayName').exec(function(err, team) {
+exports.buddyeventByID = function(req, res, next, id) { 
+	Buddyevent.findById(id).populate('user', 'displayName').exec(function(err, buddyevent) {
 		if (err) return next(err);
-		if (! team) return next(new Error('Failed to load Team ' + id));
-		req.team = team;
+		if (! buddyevent) return next(new Error('Failed to load Buddyevent ' + id));
+		req.buddyevent = buddyevent ;
 		next();
 	});
 };
 
 /**
- * Team authorization middleware
+ * Buddyevent authorization middleware
  */
 exports.hasAuthorization = function(req, res, next) {
-	if (req.team.user.id !== req.user.id) {
+	if (req.buddyevent.user.id !== req.user.id) {
 		return res.status(403).send('User is not authorized');
 	}
 	next();

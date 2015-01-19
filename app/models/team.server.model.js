@@ -43,6 +43,11 @@ var BuddyeventSchema = new Schema({
 		required: 'Please fill title',
 		trim: true
 	},
+	description: {
+		type: String,
+		default: '',
+		trim: true
+	},
 	from: {
 		type: Date,
 		default: ''
@@ -50,6 +55,10 @@ var BuddyeventSchema = new Schema({
 	to: {
 		type: Date,
 		default: ''
+	},
+	created: {
+		type: Date,
+		default: Date.now
 	}
 });
 
@@ -78,7 +87,7 @@ var TeamSchema = new Schema({
 		ref: 'User'
 	},
 	members: [MemberSchema],
-	events: [BuddyeventSchema]
+	buddyevents: [BuddyeventSchema]
 });
 
 mongoose.model('Team', TeamSchema);

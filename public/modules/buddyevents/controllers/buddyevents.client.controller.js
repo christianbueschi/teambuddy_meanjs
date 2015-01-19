@@ -11,78 +11,42 @@ angular.module('buddyevents').controller('BuddyeventsController', ['$scope', '$s
 
 		};
 
-		// Change Team by choosing one in the dropdown
-		$scope.changeTeam = function($event, _id) {
-			$event.preventDefault();
-			$rootScope.team = Teams.get({ 
-				teamId: _id
+		// Find existing Member
+		$scope.findOne = function() {
+
+			$scope.buddyevent = Buddyevents.get({ 
+				buddyeventId: $stateParams.buddyeventId
 			});
 		};
+
 
 		// Update existing Team
 		$scope.add = function() {
 			var team = this.team;
 
-			var member = {
-				firstname: this.firstname,
-				lastname: this.lastname
+			var buddyevent = {
+				title: this.title,
+				description: this.description,
+				from: this.data.from,
+				to: this.data.to
 			};
 
-			team.members.push(member);
+			team.buddyevents.push(buddyevent);
 
 			var _this = this;
 
 			team.$update(function() {
-				_this.firstname = '';
-				_this.lastname = '';
+				// _this.firstname = '';
+				// _this.lastname = '';
 
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
 		};
 
-
-
-
-
-		// Create new Buddyevent
-		$scope.create = function() {
-			// Create new Buddyevent object
-			var buddyevent = new Buddyevents ({
-				name: this.name
-			});
-
-			// Redirect after save
-			buddyevent.$save(function(response) {
-				$location.path('buddyevents/' + response._id);
-
-				// Clear form fields
-				$scope.name = '';
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
-
-		// Remove existing Buddyevent
-		$scope.remove = function(buddyevent) {
-			if ( buddyevent ) { 
-				buddyevent.$remove();
-
-				for (var i in $scope.buddyevents) {
-					if ($scope.buddyevents [i] === buddyevent) {
-						$scope.buddyevents.splice(i, 1);
-					}
-				}
-			} else {
-				$scope.buddyevent.$remove(function() {
-					$location.path('buddyevents');
-				});
-			}
-		};
-
-		// Update existing Buddyevent
+		// Update existing Team
 		$scope.update = function() {
-			var buddyevent = $scope.buddyevent;
+			var buddyevent = this.buddyevent;
 
 			buddyevent.$update(function() {
 				$location.path('buddyevents/' + buddyevent._id);
@@ -91,16 +55,30 @@ angular.module('buddyevents').controller('BuddyeventsController', ['$scope', '$s
 			});
 		};
 
-		// Find a list of Buddyevents
-		$scope.find = function() {
-			$scope.buddyevents = Buddyevents.query();
-		};
+		// Remove existing Member
+		$scope.remove = function(buddyevent) {
+			var team = this.team;
+			
+			for (var i in team.buddyevents) {
+				if (team.buddyevents[i] === buddyevent) {
+					team.buddyevents.splice(i, 1);
+				}
+			}
 
-		// Find existing Buddyevent
-		$scope.findOne = function() {
-			$scope.buddyevent = Buddyevents.get({ 
-				buddyeventId: $stateParams.buddyeventId
+			team.$update(function() {
+				
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
 			});
 		};
+
+		// Change Team by choosing one in the dropdown
+		$scope.changeTeam = function($event, _id) {
+			$event.preventDefault();
+			$rootScope.team = Teams.get({ 
+				teamId: _id
+			});
+		};
+
 	}
 ]);

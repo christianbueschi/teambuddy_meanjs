@@ -5,26 +5,9 @@
  */
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
-	Buddyevent = mongoose.model('Buddyevent'),
+	Team = mongoose.model('Team'),
 	_ = require('lodash');
 
-/**
- * Create a Buddyevent
- */
-exports.create = function(req, res) {
-	var buddyevent = new Buddyevent(req.body);
-	buddyevent.user = req.user;
-
-	buddyevent.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(buddyevent);
-		}
-	});
-};
 
 /**
  * Show the current Buddyevent
@@ -34,74 +17,53 @@ exports.read = function(req, res) {
 };
 
 /**
- * Update a Buddyevent
+ * Update a Buddyevent inside his team
  */
 exports.update = function(req, res) {
-	var buddyevent = req.buddyevent ;
-
-	buddyevent = _.extend(buddyevent , req.body);
-
-	buddyevent.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(buddyevent);
-		}
-	});
+	var buddyevent = req.buddyevent;
+	console.log(buddyevent);
+	Team.findOne({'buddyevents._id' : buddyevent._id }, function (err, team){
+		console.log(team);
+		for (var i = 0; i < team.buddyevents.length; i++) {
+			if(team.buddyevents[i]._id.equals(buddyevent._id)) {
+				// the save() function will not work when we try to override the whole object
+				// i.e. team.buddyevents[i] = req.body;
+				// therefore we need to override all of its properties:
+				team.buddyevents[i].title = req.body.title;
+				team.buddyevents[i].description = req.body.description;
+				team.buddyevents[i].from = req.body.from;
+				team.buddyevents[i].to = req.body.to;
+			} 
+		}	
+		// use save() method instead of update() to make middleware applicable (i.e. validators)
+		// see: http://mongoosejs.com/docs/2.7.x/docs/updating-documents.html 
+		team.save(function(err) {
+			if (err) {
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.jsonp(buddyevent);
+			}
+		});
+	});	
 };
 
-/**
- * Delete an Buddyevent
- */
-exports.delete = function(req, res) {
-	var buddyevent = req.buddyevent ;
-
-	buddyevent.remove(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(buddyevent);
-		}
-	});
-};
-
-/**
- * List of Buddyevents
- */
-exports.list = function(req, res) { 
-	Buddyevent.find().sort('-created').populate('user', 'displayName').exec(function(err, buddyevents) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(buddyevents);
-		}
-	});
-};
 
 /**
  * Buddyevent middleware
  */
 exports.buddyeventByID = function(req, res, next, id) { 
-	Buddyevent.findById(id).populate('user', 'displayName').exec(function(err, buddyevent) {
+
+	Team.findOne(
+		{'buddyevents._id' : id }, 
+		{'buddyevents.$' : 1 })
+	.populate('user', 'displayName')
+	.exec(function(err, team) {
 		if (err) return next(err);
-		if (! buddyevent) return next(new Error('Failed to load Buddyevent ' + id));
-		req.buddyevent = buddyevent ;
+		if (! team) return next(new Error('Failed to load Buddyevent ' + id));
+		req.buddyevent = team.buddyevents[0];
 		next();
 	});
-};
 
-/**
- * Buddyevent authorization middleware
- */
-exports.hasAuthorization = function(req, res, next) {
-	if (req.buddyevent.user.id !== req.user.id) {
-		return res.status(403).send('User is not authorized');
-	}
-	next();
 };

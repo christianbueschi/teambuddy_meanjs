@@ -26,10 +26,17 @@ module.exports = {
 				'public/lib/angular-animate/angular-animate.min.js',
 				'public/lib/angular-ui-router/release/angular-ui-router.min.js',
 				'public/lib/angular-ui-utils/ui-utils.min.js',
-				'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js'
+				'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
+				// for datetimepicker
+				'public/lib/jquery/dist/jquery.min.js',
+				'public/lib/bootstrap/dist/js/bootstrap.min.js',
+				'public/lib/moment/min/moment.min.js',
+				'public/lib/angular-bootstrap-datetimepicker/src/js/datetimepicker.js'
 			]
 		},
-		css: [],
+		css: [
+			'public/lib/angular-bootstrap-datetimepicker/src/css/datetimepicker.css'
+		],
 		js: 'public/dist/application.min.js'
 	},
 	facebook: {

@@ -1,6 +1,9 @@
 <section data-ng-controller="BuddyeventsController" data-ng-init="findOne()">
 	<div class="page-header">
-		<h1 data-ng-bind="buddyevent.name"></h1>
+		<h1 data-ng-bind="buddyevent.title"></h1>
+		<h3 data-ng-bind="buddyevent.description"></h3>
+		<p>Von: {{buddyevent.from | date:"dd. MMMM yyyy, HH.mm"}} Uhr</p>
+		<p>Bis: {{buddyevent.to | date:"dd. MMM yyyy, HH.mm"}} Uhr</p>
 	</div>
 	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == buddyevent.user._id))">
 		<a class="btn btn-primary" href="/#!/buddyevents/{{buddyevent._id}}/edit">

@@ -49,11 +49,19 @@ module.exports = {
 				'public/lib/angular-animate/angular-animate.js',
 				'public/lib/angular-ui-router/release/angular-ui-router.js',
 				'public/lib/angular-ui-utils/ui-utils.js',
-				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js'
+				'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
+				// for datetimepicker
+				'public/lib/jquery/dist/jquery.js',
+				'public/lib/bootstrap/dist/js/bootstrap.js',
+				'public/lib/moment/moment.js',
+				'public/lib/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
+
 			]
 		},
 		css: [
-			'public/dist/application.css'
+			'public/dist/application.css',
+			// for datetimepicker
+			'public/lib/angular-bootstrap-datetimepicker/src/css/datetimepicker.css'
 		],
 		js: [
 			'public/config.js',

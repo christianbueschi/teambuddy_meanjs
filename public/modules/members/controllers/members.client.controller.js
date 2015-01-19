@@ -57,15 +57,10 @@ angular.module('members').controller('MembersController', ['$scope', '$statePara
 		// Remove existing Member
 		$scope.remove = function(member) {
 			var team = $scope.team;
-
-			console.log(team);
 			
 			for (var i in team.members) {
-				console.log(member);
-				console.log(team.members[i]);
 				if (team.members[i] === member) {
 					team.members.splice(i, 1);
-					console.log(true);
 				}
 			}
 

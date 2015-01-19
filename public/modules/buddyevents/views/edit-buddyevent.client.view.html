@@ -5,19 +5,52 @@
     <div class="col-md-12">
         <form class="form-horizontal" data-ng-submit="update()" novalidate>
             <fieldset>
+
                 <div class="form-group">
-                    <label class="control-label" for="name">Name</label>
+                    <label class="control-label" for="name">Titel</label>
                     <div class="controls">
-                        <input type="text" data-ng-model="buddyevent.name" id="name" class="form-control" placeholder="Name" required>
+                        <input type="text" data-ng-model="buddyevent.title" id="name" class="form-control" placeholder="Titel" required>
                     </div>
                 </div>
+                
+                <div class="form-group">
+                    <label class="control-label" for="name">Beschreibung</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="buddyevent.description" id="name" class="form-control" placeholder="Beschreibung" required>
+                    </div>
+                </div>
+
+                <div class="dropdown form-group">
+                    <a class="dropdown-toggle js-toggle-dateFrom" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">
+                        <div class="input-append">
+                            <input type="text" class="form-control" placeholder="Von" data-ng-model="buddyevent.from">
+                            <span class="add-on"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <datetimepicker data-ng-model="buddyevent.from" data-datetimepicker-config="{ dropdownSelector: '.js-toggle-dateFrom' }"></datetimepicker>
+                    </ul>
+                </div>
+
+                <div class="dropdown form-group">
+                    <a class="dropdown-toggle js-toggle-dateTo" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">
+                        <div class="input-append">
+                            <input type="text" class="form-control" placeholder="Bis" data-ng-model="buddyevent.to">
+                            <span class="add-on"><i class="glyphicon glyphicon-calendar"></i></span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <datetimepicker data-ng-model="buddyevent.to" data-datetimepicker-config="{ dropdownSelector: '.js-toggle-dateTo' }"></datetimepicker>
+                    </ul>
+                </div>
+
                 <div class="form-group">
                     <input type="submit" value="Update" class="btn btn-default">
                 </div>
-				<div data-ng-show="error" class="text-danger">
-					<strong data-ng-bind="error"></strong>
-				</div>
-            </fieldset>
-        </form>
-    </div>
+                <div data-ng-show="error" class="text-danger">
+                   <strong data-ng-bind="error"></strong>
+               </div>
+           </fieldset>
+       </form>
+   </div>
 </section>

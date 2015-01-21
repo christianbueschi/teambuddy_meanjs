@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'mean';
-	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils'];
+	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils', 'ui.bootstrap.datetimepicker'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {
@@ -43,8 +43,8 @@ angular.element(document).ready(function() {
 });
 'use strict';
 
-// Use Applicaion configuration module to register a new module
-ApplicationConfiguration.registerModule('articles');
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('buddyevents');
 'use strict';
 
 // Use Applicaion configuration module to register a new module
@@ -65,102 +65,127 @@ ApplicationConfiguration.registerModule('users');
 'use strict';
 
 // Configuring the Articles module
-angular.module('articles').run(['Menus',
+angular.module('buddyevents').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
-
+		Menus.addMenuItem('topbar', 'Buddyevents', 'buddyevents', '', null, null, null, 3);
 	}
 ]);
 'use strict';
 
-// Setting up route
-angular.module('articles').config(['$stateProvider',
+//Setting up route
+angular.module('buddyevents').config(['$stateProvider',
 	function($stateProvider) {
-		// Articles state routing
+		// Buddyevents state routing
 		$stateProvider.
-		state('listArticles', {
-			url: '/articles',
-			templateUrl: 'modules/articles/views/list-articles.client.view.html'
+		state('listBuddyevents', {
+			url: '/buddyevents',
+			templateUrl: 'modules/buddyevents/views/list-buddyevents.client.view.html'
 		}).
-		state('createArticle', {
-			url: '/articles/create',
-			templateUrl: 'modules/articles/views/create-article.client.view.html'
+		state('createBuddyevent', {
+			url: '/buddyevents/create',
+			templateUrl: 'modules/buddyevents/views/create-buddyevent.client.view.html'
 		}).
-		state('viewArticle', {
-			url: '/articles/:articleId',
-			templateUrl: 'modules/articles/views/view-article.client.view.html'
+		state('viewBuddyevent', {
+			url: '/buddyevents/:buddyeventId',
+			templateUrl: 'modules/buddyevents/views/view-buddyevent.client.view.html'
 		}).
-		state('editArticle', {
-			url: '/articles/:articleId/edit',
-			templateUrl: 'modules/articles/views/edit-article.client.view.html'
+		state('editBuddyevent', {
+			url: '/buddyevents/:buddyeventId/edit',
+			templateUrl: 'modules/buddyevents/views/edit-buddyevent.client.view.html'
 		});
 	}
 ]);
 'use strict';
 
-angular.module('articles').controller('ArticlesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Articles',
-	function($scope, $stateParams, $location, Authentication, Articles) {
+// Buddyevents controller
+angular.module('buddyevents').controller('BuddyeventsController', ['$scope', '$stateParams', '$location', '$rootScope', 'Authentication', 'Buddyevents', 'Teams',
+	function($scope, $stateParams, $location, $rootScope, Authentication, Buddyevents, Teams) {
 		$scope.authentication = Authentication;
 
-		$scope.create = function() {
-			var article = new Articles({
-				title: this.title,
-				content: this.content
-			});
-			article.$save(function(response) {
-				$location.path('articles/' + response._id);
+		// Find a list of Teams
+		$scope.init = function() {
+			$scope.teams = Teams.query();
 
-				$scope.title = '';
-				$scope.content = '';
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
 		};
 
-		$scope.remove = function(article) {
-			if (article) {
-				article.$remove();
-
-				for (var i in $scope.articles) {
-					if ($scope.articles[i] === article) {
-						$scope.articles.splice(i, 1);
-					}
-				}
-			} else {
-				$scope.article.$remove(function() {
-					$location.path('articles');
-				});
-			}
-		};
-
-		$scope.update = function() {
-			var article = $scope.article;
-
-			article.$update(function() {
-				$location.path('articles/' + article._id);
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
-
-		$scope.find = function() {
-			$scope.articles = Articles.query();
-		};
-
+		// Find existing Member
 		$scope.findOne = function() {
-			$scope.article = Articles.get({
-				articleId: $stateParams.articleId
+
+			$scope.buddyevent = Buddyevents.get({ 
+				buddyeventId: $stateParams.buddyeventId
 			});
 		};
+
+
+		// Update existing Team
+		$scope.add = function() {
+			var team = this.team;
+
+			var buddyevent = {
+				title: this.title,
+				description: this.description,
+				from: this.data.from,
+				to: this.data.to
+			};
+
+			team.buddyevents.push(buddyevent);
+
+			var _this = this;
+
+			team.$update(function() {
+				// _this.firstname = '';
+				// _this.lastname = '';
+
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Update existing Team
+		$scope.update = function() {
+			var buddyevent = this.buddyevent;
+
+			buddyevent.$update(function() {
+				$location.path('buddyevents/' + buddyevent._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Member
+		$scope.remove = function(buddyevent) {
+			var team = this.team;
+			
+			for (var i in team.buddyevents) {
+				if (team.buddyevents[i] === buddyevent) {
+					team.buddyevents.splice(i, 1);
+				}
+			}
+
+			team.$update(function() {
+				
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Change Team by choosing one in the dropdown
+		$scope.changeTeam = function($event, _id) {
+			$event.preventDefault();
+			$rootScope.team = Teams.get({ 
+				teamId: _id
+			});
+		};
+
 	}
 ]);
 'use strict';
 
-//Articles service used for communicating with the articles REST endpoints
-angular.module('articles').factory('Articles', ['$resource',
+//Buddyevents service used to communicate Buddyevents REST endpoints
+angular.module('buddyevents').factory('Buddyevents', ['$resource',
 	function($resource) {
-		return $resource('articles/:articleId', {
-			articleId: '@_id'
+		return $resource('buddyevents/:buddyeventId', { buddyeventId: '@_id'
 		}, {
 			update: {
 				method: 'PUT'
@@ -383,10 +408,7 @@ angular.module('core').service('Menus', [
 angular.module('members').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'Mitglieder', 'members', 'dropdown', '/members(/create)?');
-		Menus.addSubMenuItem('topbar', 'members', 'Alle Mitglieder', 'members');
-		Menus.addSubMenuItem('topbar', 'members', 'Neues Mitglied', 'members/create');
-		
+		Menus.addMenuItem('topbar', 'Mitglieder', 'members','', null, null, null, 2);
 	}
 ]);
 
@@ -405,35 +427,85 @@ angular.module('members').config(['$stateProvider',
 		state('createMember', {
 			url: '/members/create',
 			templateUrl: 'modules/members/views/create-members.client.view.html'
+		}).
+			state('viewMember', {
+			url: '/members/:memberId',
+			templateUrl: 'modules/members/views/view-members.client.view.html'
+		}).
+		state('editMember', {
+			url: '/members/:memberId/edit',
+			templateUrl: 'modules/members/views/edit-members.client.view.html'
 		});
 	}
 ]);
 'use strict';
 
 // Teams controller
-angular.module('members').controller('MembersController', ['$scope', '$stateParams', '$location', 'Authentication', 'Teams',
-	function($scope, $stateParams, $location, Authentication, Teams) {
+angular.module('members').controller('MembersController', ['$scope', '$stateParams', '$location', '$rootScope', 'Authentication', 'Teams', 'Members',
+	function($scope, $stateParams, $location, $rootScope, Authentication, Teams, Members) {
 		$scope.authentication = Authentication;
-
-		var Members = {};
 
 		// Find a list of Teams
 		$scope.find = function() {
 			$scope.teams = Teams.query();
+
+		};
+
+		// Find existing Member
+		$scope.findOne = function() {
+
+			$scope.member = Members.get({ 
+				memberId: $stateParams.memberId
+			});
 		};
 
 		// Update existing Team
 		$scope.add = function() {
-			var team = $scope.team;
+
+			//console.log(this.team);
+			var team = this.team;
 
 			var member = {
 				firstname: this.firstname,
 				lastname: this.lastname
 			};
+
 			team.members.push(member);
 
+			var _this = this;
+
 			team.$update(function() {
-				$location.path('teams/' + team._id);
+				_this.firstname = '';
+				_this.lastname = '';
+
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Update existing Team
+		$scope.update = function() {
+			var member = $scope.member;
+
+			member.$update(function() {
+				$location.path('members/' + member._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Member
+		$scope.remove = function(member) {
+			var team = $scope.team;
+			
+			for (var i in team.members) {
+				if (team.members[i] === member) {
+					team.members.splice(i, 1);
+				}
+			}
+
+			team.$update(function() {
+				
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -442,10 +514,23 @@ angular.module('members').controller('MembersController', ['$scope', '$statePara
 		// Change Team by choosing one in the dropdown
 		$scope.changeTeam = function($event, _id) {
 			$event.preventDefault();
-			$scope.team = Teams.get({ 
+			$rootScope.team = Teams.get({ 
 				teamId: _id
 			});
 		};
+	}
+]);
+'use strict';
+
+//Teams service used to communicate Teams REST endpoints
+angular.module('members').factory('Members', ['$resource',
+	function($resource) {
+		return $resource('members/:memberId', { memberId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
 	}
 ]);
 'use strict';
@@ -454,9 +539,7 @@ angular.module('members').controller('MembersController', ['$scope', '$statePara
 angular.module('teams').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
-		Menus.addMenuItem('topbar', 'Team', 'teams', 'dropdown', '/teams(/create)?');
-		Menus.addSubMenuItem('topbar', 'teams', 'Alle Teams', 'teams');
-		Menus.addSubMenuItem('topbar', 'teams', 'Neues Team', 'teams/create');
+		Menus.addMenuItem('topbar', 'Team', 'teams', '', null, null, null, 1);
 	}
 ]);
 'use strict';
@@ -487,8 +570,8 @@ angular.module('teams').config(['$stateProvider',
 'use strict';
 
 // Teams controller
-angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Teams',
-	function($scope, $stateParams, $location, Authentication, Teams) {
+angular.module('teams').controller('TeamsController', ['$scope', '$stateParams', '$location', '$rootScope', 'Authentication', 'Teams',
+	function($scope, $stateParams, $location, $rootScope, Authentication, Teams) {
 		$scope.authentication = Authentication;
 
 		// Create new Team
@@ -501,10 +584,13 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
 			// Redirect after save
 			team.$save(function(response) {
-				$location.path('teams/' + response._id);
+				
+				$location.path('teams');
 
 				// Clear form fields
 				$scope.name = '';
+				$scope.description = '';
+				$scope.teams = Teams.query();
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -520,10 +606,6 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 						$scope.teams.splice(i, 1);
 					}
 				}
-			} else {
-				$scope.team.$remove(function() {
-					$location.path('teams');
-				});
 			}
 		};
 
@@ -545,15 +627,17 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 
 		// Find existing Team
 		$scope.findOne = function() {
+
 			$scope.team = Teams.get({ 
 				teamId: $stateParams.teamId
 			});
+
 		};
 
 		// Change Team by choosing one in the dropdown
 		$scope.changeTeam = function($event, _id) {
 			$event.preventDefault();
-			$scope.team = Teams.get({ 
+			$rootScope.team = Teams.get({ 
 				teamId: _id
 			});
 		};

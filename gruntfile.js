@@ -66,7 +66,12 @@ module.exports = function(grunt) {
 				files: { 
 					'public/dist/application.css': 'public/less/application.less'
             	}
-    		}
+    		},
+			production: {
+				files: {
+					'public/dist/application.min.css': 'public/less/application.less'
+				}
+			}
 		},
 		jshint: {
 			all: {

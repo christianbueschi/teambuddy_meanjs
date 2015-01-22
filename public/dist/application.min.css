@@ -6322,6 +6322,7 @@ body.ng-cloak {
   height: 100px;
 }
 .navbar .nav {
+  /*margin-top: 33px;*/
   margin-top: 33px;
 }
 .navbar li a {

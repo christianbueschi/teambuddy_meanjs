@@ -68,6 +68,9 @@ module.exports = function(grunt) {
             	}
     		},
 			production: {
+				options: {
+					cleancss: true
+				},
 				files: {
 					'public/dist/application.min.css': 'public/less/application.less'
 				}
@@ -102,7 +105,7 @@ module.exports = function(grunt) {
 		cssmin: {
 			combine: {
 				files: {
-					'public/dist/application.min.css': '<%= applicationCSSFiles %>'
+					//'public/dist/application.min.css': '<%= applicationCSSFiles %>'
 				}
 			}
 		},

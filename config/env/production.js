@@ -35,6 +35,7 @@ module.exports = {
 			]
 		},
 		css: [
+			'public/dist/application.min.css',
 			'public/lib/angular-bootstrap-datetimepicker/src/css/datetimepicker.css'
 		],
 		js: 'public/dist/application.min.js'

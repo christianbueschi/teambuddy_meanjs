@@ -6,7 +6,7 @@ module.exports = {
 		description: 'Organisieren leicht gemacht',
 		keywords: 'Verein, Organisation, Administration, Eventorganisation'
 	},
-	port: process.env.PORT || 3000,
+	port: process.env.PORT || 8080,
 	templateEngine: 'swig',
 	// The secret should be set to a non-guessable string that
 	// is used to compute a session hash

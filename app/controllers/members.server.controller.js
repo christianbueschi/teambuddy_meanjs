@@ -62,4 +62,17 @@ exports.memberByID = function(req, res, next, id) {
 	});
 
 };
+
+/**
+ * Team middleware
+ */
+exports.listByTeamId = function(req, res, next, id) { 
+	console.log('members list', id);
+	Team.findById(id).populate('user', 'displayName').exec(function(err, team) {
+		if (err) return next(err);
+		if (! team) return next(new Error('Failed to load Team ' + id));
+		req.team = team;
+		next();
+	});
+};
 	

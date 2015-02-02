@@ -14,11 +14,11 @@ angular.module('teams').config(['$stateProvider',
 			templateUrl: 'modules/teams/views/create-team.client.view.html'
 		}).
 		state('viewTeam', {
-			url: '/teams/:teamId',
+			url: '/team/:teamId',
 			templateUrl: 'modules/teams/views/view-team.client.view.html'
 		}).
 		state('editTeam', {
-			url: '/teams/:teamId/edit',
+			url: '/team/:teamId/edit',
 			templateUrl: 'modules/teams/views/edit-team.client.view.html'
 		});
 	}

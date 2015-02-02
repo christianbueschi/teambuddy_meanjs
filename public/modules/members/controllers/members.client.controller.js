@@ -1,14 +1,20 @@
 'use strict';
 
 // Teams controller
-angular.module('members').controller('MembersController', ['$scope', '$stateParams', '$location', '$rootScope', 'Authentication', 'Teams', 'Members',
-	function($scope, $stateParams, $location, $rootScope, Authentication, Teams, Members) {
+angular.module('members').controller('MembersController', ['$scope', '$stateParams', '$location', '$rootScope', 'Authentication', 'Teams', 'Members', 'AcitveTeamFactory',
+	function($scope, $stateParams, $location, $rootScope, Authentication, Teams, Members, AcitveTeamFactory) {
 		$scope.authentication = Authentication;
 
 		// Find a list of Teams
 		$scope.find = function() {
 			$scope.teams = Teams.query();
 
+			var teamId = AcitveTeamFactory.getActiveTeam(); 
+			if(teamId) {
+				$scope.team = Teams.get({ 
+					teamId: teamId
+				});
+			}
 		};
 
 		// Find existing Member
@@ -19,7 +25,6 @@ angular.module('members').controller('MembersController', ['$scope', '$statePara
 			});
 		};
 
-		// Update existing Team
 		$scope.add = function() {
 
 			//console.log(this.team);
@@ -42,6 +47,9 @@ angular.module('members').controller('MembersController', ['$scope', '$statePara
 				$scope.error = errorResponse.data.message;
 			});
 		};
+
+		// Update existing Team
+
 
 		// Update existing Team
 		$scope.update = function() {
@@ -74,7 +82,10 @@ angular.module('members').controller('MembersController', ['$scope', '$statePara
 		// Change Team by choosing one in the dropdown
 		$scope.changeTeam = function($event, _id) {
 			$event.preventDefault();
-			$rootScope.team = Teams.get({ 
+			
+			AcitveTeamFactory.setActiveTeam(_id);
+			
+			$scope.team = Teams.get({ 
 				teamId: _id
 			});
 		};

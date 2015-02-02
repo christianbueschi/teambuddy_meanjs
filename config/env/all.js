@@ -6,14 +6,14 @@ module.exports = {
 		description: 'Organisieren leicht gemacht',
 		keywords: 'Verein, Organisation, Administration, Eventorganisation'
 	},
-	port: process.env.PORT || 8080,
+	port: process.env.PORT || 3000,
 	templateEngine: 'swig',
 	// The secret should be set to a non-guessable string that
 	// is used to compute a session hash
 	sessionSecret: 'TEAMBUDDY',
 	// The name of the MongoDB collection to store sessions in
 	sessionCollection: 'sessions',
-	
+
 	// The session cookie settings
 	sessionCookie: { 
 		path: '/',

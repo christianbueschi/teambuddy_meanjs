@@ -6336,3 +6336,11 @@ body.ng-cloak {
 .navbar li li a {
   color: black;
 }
+.input-append {
+  position: relative;
+}
+.input-append .add-on {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+}

@@ -27,6 +27,30 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 			});
 		};
 
+		// Update existing Team
+		$scope.add = function() {
+
+			//console.log(this.team);
+			var team = this.team;
+
+			var member = {
+				firstname: this.firstname,
+				lastname: this.lastname
+			};
+
+			team.members.push(member);
+
+			var _this = this;
+
+			team.$update(function() {
+				_this.firstname = '';
+				_this.lastname = '';
+
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
 		// Remove existing Team
 		$scope.remove = function(team) {
 			if ( team ) { 

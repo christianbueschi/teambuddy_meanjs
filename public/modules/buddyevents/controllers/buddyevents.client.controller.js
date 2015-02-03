@@ -1,14 +1,20 @@
 'use strict';
 
 // Buddyevents controller
-angular.module('buddyevents').controller('BuddyeventsController', ['$scope', '$stateParams', '$location', '$rootScope', 'Authentication', 'Buddyevents', 'Teams',
-	function($scope, $stateParams, $location, $rootScope, Authentication, Buddyevents, Teams) {
+angular.module('buddyevents').controller('BuddyeventsController', ['$scope', '$stateParams', '$location', '$rootScope', 'Authentication', 'Buddyevents', 'Teams', 'AcitveTeamFactory',
+	function($scope, $stateParams, $location, $rootScope, Authentication, Buddyevents, Teams, AcitveTeamFactory) {
 		$scope.authentication = Authentication;
 
 		// Find a list of Teams
 		$scope.init = function() {
 			$scope.teams = Teams.query();
 
+			var teamId = AcitveTeamFactory.getActiveTeam(); 
+			if(teamId) {
+				$scope.team = Teams.get({ 
+					teamId: teamId
+				});
+			}
 		};
 
 		// Find existing Member

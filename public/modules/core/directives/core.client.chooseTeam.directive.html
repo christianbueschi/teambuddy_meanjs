@@ -1,0 +1,12 @@
+<div class="btn-group" dropdown is-open="status.isopen">
+        <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+            <span data-ng-if="team.name" data-ng-bind="team.name"></span>
+            <span data-ng-if="!team.name">Wähle ein Team</span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li role="presentation" data-ng-repeat="team in teams">
+                <a role="menuitem" tabindex="-1" href="#!" data-ng-bind="team.name" data-ng-click="changeTeam($event, team._id)"></a>
+            </li>
+        </ul>
+</div>

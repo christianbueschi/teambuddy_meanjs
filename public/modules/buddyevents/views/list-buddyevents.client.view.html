@@ -1,45 +1,8 @@
 <section data-ng-controller="BuddyeventsController" data-ng-init="init()">
-    <div class="btn-group" dropdown is-open="status.isopen">
-        <button type="button" class="btn btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-            <span data-ng-if="team.name" data-ng-bind="team.name"></span>
-            <span data-ng-if="!team.name">Wähle ein Team</span>
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu">
-            <li role="presentation" data-ng-repeat="team in teams">
-                <a role="menuitem" tabindex="-1" href="#!" data-ng-bind="team.name" data-ng-click="changeTeam($event, team._id)"></a>
-            </li>
-        </ul>
-    </div>
+    
+    <choose-team></choose-team>  
 
     <div class="row" data-ng-if="team">
-
-        <div class="col-md-6">
-            <div class="page-header">
-                <h1>Events von {{team.name}}</h1>
-            </div>
-
-            <div class="list-group">
-                <div class="panel panel-primary" data-ng-repeat="buddyevent in team.buddyevents | orderBy : created">
-                    <div class="panel-heading">
-                        <h2 class="panel-title">{{buddyevent.title}}</h2>
-                    </div>
-                    <div class="panel-body">
-                        <h4>{{buddyevent.description}}</h4>
-                        <p>Von: {{buddyevent.from | date: "dd. MMM yyyy, HH.mm"}} Uhr </p>
-                        <p>Bis: {{buddyevent.to | date: "dd. MMM yyyy, HH.mm"}} Uhr</p>
-                        <div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
-                            <a class="btn btn-primary" href="/#!/buddyevents/{{buddyevent._id}}/edit">
-                                <i class="glyphicon glyphicon-edit"></i>
-                            </a>
-                            <a class="btn btn-primary" data-ng-click="remove(buddyevent);">
-                                <i class="glyphicon glyphicon-trash"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="col-md-6">
             <div class="page-header">
                 <h1>Erstelle einen neuen Event im Team {{team.name}}</h1>
@@ -90,6 +53,33 @@
                         </div>
                     </fieldset>
                 </form>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="page-header">
+                <h1>Events von {{team.name}}</h1>
+            </div>
+
+            <div class="list-group">
+                <div class="panel panel-primary" data-ng-repeat="buddyevent in team.buddyevents | orderBy : created">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">{{buddyevent.title}}</h2>
+                    </div>
+                    <div class="panel-body">
+                        <h4>{{buddyevent.description}}</h4>
+                        <p>Von: {{buddyevent.from | date: "dd. MMM yyyy, HH.mm"}} Uhr </p>
+                        <p>Bis: {{buddyevent.to | date: "dd. MMM yyyy, HH.mm"}} Uhr</p>
+                        <div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
+                            <a class="btn btn-primary" href="/#!/buddyevents/{{buddyevent._id}}/edit">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </a>
+                            <a class="btn btn-primary" data-ng-click="remove(buddyevent);">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

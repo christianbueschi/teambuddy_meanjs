@@ -13,6 +13,7 @@ module.exports = {
 	sessionSecret: 'TEAMBUDDY',
 	// The name of the MongoDB collection to store sessions in
 	sessionCollection: 'sessions',
+
 	// The session cookie settings
 	sessionCookie: { 
 		path: '/',

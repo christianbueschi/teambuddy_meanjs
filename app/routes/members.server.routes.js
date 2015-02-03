@@ -6,9 +6,9 @@ module.exports = function(app) {
 	var teams = require('../../app/controllers/teams.server.controller');
 
 	// Members Routes
-	//app.route('/members');
-		//.get(members.list);
-		//.post(users.requiresLogin, members.create);
+	app.route('/team/:teamId/members')
+	 	.get(members.listByTeamId);
+	// 	.post(users.requiresLogin, members.create);
 
 
 	app.route('/members/:memberId')
@@ -18,4 +18,6 @@ module.exports = function(app) {
 	
 	// Finish by binding the Team middleware
 	app.param('memberId', members.memberByID);
+	// if param teamId, apply function members.listByTeamId
+	app.param('teamId', members.listByTeamId);
 };

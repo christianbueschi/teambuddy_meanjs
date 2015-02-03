@@ -25,8 +25,12 @@ var fs = require('fs'),
 	path = require('path');
 
 module.exports = function(db) {
+	var cors = require('cors');
 	// Initialize express app
 	var app = express();
+
+	// call cors module
+	app.use(cors());
 
 	// Globbing model files
 	config.getGlobbedFiles('./app/models/**/*.js').forEach(function(modelPath) {

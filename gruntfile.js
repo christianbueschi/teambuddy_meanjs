@@ -68,12 +68,13 @@ module.exports = function(grunt) {
             	}
     		},
 			production: {
+
 				options: {
-					cleancss: true
+					paths: ['public/less'],
+					compress: true
 				},
-				files: {
-					'public/dist/application.min.css': 'public/less/application.less'
-				}
+				src: 'public/less/application.less',
+				dest: 'public/dist/application.min.css'
 			}
 		},
 		jshint: {
@@ -99,13 +100,6 @@ module.exports = function(grunt) {
 				},
 				files: {
 					'public/dist/application.min.js': 'public/dist/application.js'
-				}
-			}
-		},
-		cssmin: {
-			combine: {
-				files: {
-					//'public/dist/application.min.css': '<%= applicationCSSFiles %>'
 				}
 			}
 		},

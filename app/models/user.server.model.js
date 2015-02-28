@@ -44,27 +44,27 @@ var UserSchema = new Schema({
 	email: {
 		type: String,
 		trim: true,
-		default: '',
-		validate: [validateLocalStrategyProperty, 'Please fill in your email'],
-		match: [/.+\@.+\..+/, 'Please fill a valid email address']
+		default: ''//,
+		// validate: [validateLocalStrategyProperty, 'Please fill in your email'],
+		// match: [/.+\@.+\..+/, 'Please fill a valid email address']
 	},
 	username: {
 		type: String,
-		unique: 'Username already exists',
-		required: 'Please fill in a username',
+		// unique: 'Username already exists',
+		// required: 'Please fill in a username',
 		trim: true
 	},
 	password: {
 		type: String,
 		default: '',
-		validate: [validateLocalStrategyPassword, 'Password should be longer']
+		// validate: [validateLocalStrategyPassword, 'Password should be longer']
 	},
 	salt: {
 		type: String
 	},
 	provider: {
 		type: String,
-		required: 'Provider is required'
+		// required: 'Provider is required'
 	},
 	providerData: {},
 	additionalProvidersData: {},
@@ -88,7 +88,17 @@ var UserSchema = new Schema({
 	},
 	resetPasswordExpires: {
 		type: Date
-	}
+	},
+	team: {
+		type: Schema.ObjectId,
+		ref: 'Team'
+	},
+	events: [
+		{
+			type: Schema.ObjectId,
+			ref: 'Event'
+		}
+	]
 });
 
 /**

@@ -7,6 +7,7 @@
         <ul class="dropdown-menu" role="menu">
             <li role="presentation" data-ng-repeat="team in teams">
                 <a role="menuitem" tabindex="-1" href="#!" data-ng-bind="team.name" data-ng-click="changeTeam($event, team._id)"></a>
+                <!-- <a role="menuitem" tabindex="-1" data-ng-bind="team.name" href="/#!/team/{{team}}"></a> -->
             </li>
         </ul>
 </div>

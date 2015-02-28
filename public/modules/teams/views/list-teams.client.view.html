@@ -30,10 +30,12 @@
    <div class="page-header">
         <h1>Deine Teams</h1>
     </div>
+
+    {{teams}}
     <div class="list-group">
         <div class="panel panel-primary" data-ng-repeat="team in teams">
             <div class="panel-heading">
-                <h2 class="panel-title" data-ng-bind="team.name"></h2>
+                <a href="/#!/team/{{team._id}}"><h2 class="panel-title" data-ng-bind="team.name"></h2></a>
             </div>
             <div class="panel-body">
                 <h5 data-ng-bind="team.description"></h5>

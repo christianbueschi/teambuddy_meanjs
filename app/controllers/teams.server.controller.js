@@ -6,12 +6,14 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors.server.controller'),
 	Team = mongoose.model('Team'),
+	User = mongoose.model('User'),
 	_ = require('lodash');
 
 /**
  * Create a Team
  */
 exports.create = function(req, res) {
+	console.log(req);
 	var team = new Team(req.body);
 	team.user = req.user;
 
@@ -33,10 +35,13 @@ exports.read = function(req, res) {
 	res.jsonp(req.team);
 };
 
+
 /**
  * Update a Team
  */
 exports.update = function(req, res) {
+
+	console.log('team: ', req.team);
 	var team = req.team;
 
 	team = _.extend(team , req.body);
@@ -53,7 +58,7 @@ exports.update = function(req, res) {
 };
 
 /**
- * Delete an Team
+ * Delete a Team
  */
 exports.delete = function(req, res) {
 	var team = req.team;
@@ -100,6 +105,7 @@ exports.teamByID = function(req, res, next, id) {
  * Team authorization middleware
  */
 exports.hasAuthorization = function(req, res, next) {
+	console.log('authorization: ' );
 	if (req.team.user.id !== req.user.id) {
 		return res.status(403).send('User is not authorized');
 	}

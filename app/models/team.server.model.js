@@ -27,10 +27,24 @@ var MemberSchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
-	going: {
-		type: Schema.ObjectId,
-		ref: 'Event'
-	},
+	eventsIn: [
+		{
+			type: Schema.ObjectId,
+			ref: 'Event'
+		}
+	],
+	eventsOut: [
+		{
+			type: Schema.ObjectId,
+			ref: 'Event'
+		}
+	],
+	eventsOutstanding: [
+		{
+			type: Schema.ObjectId,
+			ref: 'Event'
+		}
+	],
 });
 
 /**
@@ -56,6 +70,24 @@ var BuddyeventSchema = new Schema({
 		type: Date,
 		default: ''
 	},
+	membersIn: [
+		{
+			type: Schema.ObjectId,
+			ref: 'User'
+		}
+	],
+	membersOut: [
+		{
+			type: Schema.ObjectId,
+			ref: 'User'
+		}
+	],
+	membersOutstanding: [
+		{
+			type: Schema.ObjectId,
+			ref: 'User'
+		}
+	],
 	created: {
 		type: Date,
 		default: Date.now
@@ -86,7 +118,12 @@ var TeamSchema = new Schema({
 		type: Schema.ObjectId,
 		ref: 'User'
 	},
-	members: [MemberSchema],
+	members: [
+		{
+			type: Schema.ObjectId,
+			ref: 'User'
+		}
+	],
 	buddyevents: [BuddyeventSchema]
 });
 

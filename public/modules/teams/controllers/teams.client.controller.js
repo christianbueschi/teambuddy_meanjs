@@ -27,6 +27,43 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 			});
 		};
 
+		// $scope.createMember = function() {
+		// 	var user =  new Users ({
+		// 		firstName: this.firstName,
+		// 		lastName: this.lastName
+		// 	});
+		// 	console.log(user);
+
+		// 	user.$save(function(res) {
+		// 		$location.path('teams');
+		// 	}, function(error) {
+		// 		console.log(error);
+		// 	});
+
+		// };
+
+		$scope.addMember = function() {
+
+			var member = {
+				firstName: this.firstName,
+				lastName: this.lastName,
+				email: this.email
+			};
+
+			var team = $scope.team;
+			team.member = member;
+
+			console.log(team);
+
+			team.$update(function() {
+				$location.path('teams/' + team._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+
+
+		};
+
 		// Update existing Team
 		$scope.add = function() {
 
@@ -34,8 +71,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 			var team = this.team;
 
 			var member = {
-				firstname: this.firstname,
-				lastname: this.lastname
+				firstName: this.firstName,
+				lastName: this.lastName
 			};
 
 			team.members.push(member);
@@ -43,9 +80,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 			var _this = this;
 
 			team.$update(function() {
-				_this.firstname = '';
-				_this.lastname = '';
-
+				_this.firstName = '';
+				_this.lastName = '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});

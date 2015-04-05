@@ -9,34 +9,6 @@ var _ = require('lodash'),
 	passport = require('passport'),
 	User = mongoose.model('User');
 
-exports.create = function(req, res) {
-
-	var user = new User(req.body);
-
-	console.log(req.body);
-
-	user.displayName = user.firstName + ' ' + user.lastName;
-	user.username = user.firstName + user.lastName;
-	user.password = 'password';
-
-	//user.team = req.body.team._id;
-
-	console.log(user.team);
-
-	user.save(function(err) {
-		if(err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			console.log('user created: ', user);
-			res.json(user);
-		}
-	});
-	
-	console.log(user);
-};
-
 /**
  * Signup
  */

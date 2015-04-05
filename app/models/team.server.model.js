@@ -6,93 +6,8 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
-
-/**
- * Member Schema
- */
-var MemberSchema = new Schema({
-	firstname: {
-		type: String,
-		default: '',
-		required: 'Please fill firstname',
-		trim: true
-	},
-	lastname: {
-		type: String,
-		default: '',
-		required: 'Please fill lastname',
-		trim: true
-	},
-	created: {
-		type: Date,
-		default: Date.now
-	},
-	eventsIn: [
-		{
-			type: Schema.ObjectId,
-			ref: 'Event'
-		}
-	],
-	eventsOut: [
-		{
-			type: Schema.ObjectId,
-			ref: 'Event'
-		}
-	],
-	eventsOutstanding: [
-		{
-			type: Schema.ObjectId,
-			ref: 'Event'
-		}
-	],
-});
-
-/**
- * Happening Schema
- */
-var BuddyeventSchema = new Schema({
-	title: {
-		type: String,
-		default: '',
-		required: 'Please fill title',
-		trim: true
-	},
-	description: {
-		type: String,
-		default: '',
-		trim: true
-	},
-	from: {
-		type: Date,
-		default: ''
-	},
-	to: {
-		type: Date,
-		default: ''
-	},
-	membersIn: [
-		{
-			type: Schema.ObjectId,
-			ref: 'User'
-		}
-	],
-	membersOut: [
-		{
-			type: Schema.ObjectId,
-			ref: 'User'
-		}
-	],
-	membersOutstanding: [
-		{
-			type: Schema.ObjectId,
-			ref: 'User'
-		}
-	],
-	created: {
-		type: Date,
-		default: Date.now
-	}
-});
+var MemberSchema = require('./member.server.model');
+var BuddyeventSchema = require('./buddyevent.server.model');
 
 /**
  * Team Schema
@@ -118,15 +33,8 @@ var TeamSchema = new Schema({
 		type: Schema.ObjectId,
 		ref: 'User'
 	},
-	members: [
-		{
-			type: Schema.ObjectId,
-			ref: 'User'
-		}
-	],
+	members: [MemberSchema],
 	buddyevents: [BuddyeventSchema]
 });
 
 mongoose.model('Team', TeamSchema);
-
-mongoose.model('Member', MemberSchema);

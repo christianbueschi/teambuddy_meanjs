@@ -1,6 +1,7 @@
 <section data-ng-controller="TeamsController" data-ng-init="findOne()">
 	<div class="page-header">
 		<h1 data-ng-bind="team.name"></h1>
+
 		<h3 data-ng-bind="team.description"></h3>
 	</div>
 	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
@@ -14,39 +15,42 @@
 	{{team}}
 
 	<div class="col-md-12">
-	<form class="form-horizontal" data-ng-submit="addMember()" novalidate>
-		<fieldset>
-			<div class="form-group">
-				<div class="controls">
-					<input type="text" data-ng-model="firstName" id="firstName" class="form-control" placeholder="Vorname" required>
+		<form class="form-horizontal" data-ng-submit="addMember()" novalidate>
+			<fieldset>
+				<div class="form-group">
+					<div class="controls">
+						<input type="text" data-ng-model="firstname" id="firstname" class="form-control"
+							   placeholder="Vorname" required>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				<div class="controls">
-					<input type="text" data-ng-model="lastName" id="lastName" class="form-control" placeholder="Nachname" required>
+				<div class="form-group">
+					<div class="controls">
+						<input type="text" data-ng-model="lastname" id="lastname" class="form-control"
+							   placeholder="Nachname" required>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				<div class="controls">
-					<input type="text" data-ng-model="email" id="email" class="form-control" placeholder="Email" required>
+				<div class="form-group">
+					<div class="controls">
+						<input type="text" data-ng-model="email" id="email" class="form-control" placeholder="Email"
+							   required>
+					</div>
 				</div>
-			</div>
-			<div class="form-group">
-				<input type="submit" class="btn btn-primary" value="Member hinzufügen">
-			</div>
-			<div data-ng-show="error" class="text-danger">
-				<strong data-ng-bind="error"></strong>
-			</div>
-		</fieldset>
-	</form>
-</div>
+				<div class="form-group">
+					<input type="submit" class="btn btn-primary" value="Member hinzufügen">
+				</div>
+				<div data-ng-show="error" class="text-danger">
+					<strong data-ng-bind="error"></strong>
+				</div>
+			</fieldset>
+		</form>
+	</div>
 
 
 	<div class="page-header">
 		<h1>Mitglieder von {{team.name}}</h1>
 	</div>
 
-	<div class="list-group">
+	<div class="list-group" data-ng-controller="MembersController">
 		<div class="panel panel-primary" data-ng-repeat="member in team.members | orderBy : created">
 			<div class="panel-heading">
 				<h2 class="panel-title">{{member.firstname}} {{member.lastname}}</h2>
@@ -54,8 +58,10 @@
 			{{member}}
 			<div class="panel-body">
 				<h5 data-ng-bind=""></h5>
-				<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
-					<a class="btn btn-primary" href="/#!/members/{{member._id}}/edit">
+
+				<div class="pull-right"
+					 data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
+					<a class="btn btn-primary" href="/#!/team/{{team._id}}/members/{{member._id}}/edit">
 						<i class="glyphicon glyphicon-edit"></i>
 					</a>
 					<a class="btn btn-primary" data-ng-click="remove(member);">

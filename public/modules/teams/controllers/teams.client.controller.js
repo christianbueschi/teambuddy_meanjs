@@ -45,18 +45,19 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 		$scope.addMember = function() {
 
 			var member = {
-				firstName: this.firstName,
-				lastName: this.lastName,
-				email: this.email
+				firstname: this.firstname,
+				lastname: this.lastname,
+				email: this.email,
+				password: 'password'
 			};
 
 			var team = $scope.team;
-			team.member = member;
+			team.members.push(member);
 
 			console.log(team);
 
 			team.$update(function() {
-				$location.path('teams/' + team._id);
+				$location.path('team/' + team._id);
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});

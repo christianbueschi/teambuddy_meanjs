@@ -10,19 +10,41 @@ var mongoose = require('mongoose'),
  * Buddyevent Schema
  */
 var BuddyeventSchema = new Schema({
-	name: {
+	title: {
 		type: String,
 		default: '',
-		required: 'Please fill Buddyevent name',
+		required: 'Please fill title',
 		trim: true
 	},
+	description: {
+		type: String,
+		default: '',
+		trim: true
+	},
+	from: {
+		type: Date,
+		default: ''
+	},
+	to: {
+		type: Date,
+		default: ''
+	},
+	membersIn: [
+		{
+			type: Schema.ObjectId,
+			ref: 'User'
+		}
+	],
+	membersOut: [],
+	membersOutstanding: [
+		{
+			type: Schema.ObjectId,
+			ref: 'User'
+		}
+	],
 	created: {
 		type: Date,
 		default: Date.now
-	},
-	user: {
-		type: Schema.ObjectId,
-		ref: 'User'
 	}
 });
 

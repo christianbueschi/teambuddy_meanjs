@@ -1,20 +1,23 @@
 <section data-ng-controller="TeamsController" data-ng-init="findOne()">
-	<div class="page-header">
-		<h1 data-ng-bind="team.name"></h1>
-
-		<h3 data-ng-bind="team.description"></h3>
-	</div>
-	<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
-		<a class="btn btn-primary" href="/#!/teams/{{team._id}}/edit">
-			<i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" data-ng-click="remove();">
-			<i class="glyphicon glyphicon-trash"></i>
-		</a>
-	</div>
-	{{team}}
-
 	<div class="col-md-12">
+		<div class="page-header">
+			<h1 data-ng-bind="team.name"></h1>
+
+			<h3 data-ng-bind="team.description"></h3>
+		</div>
+		<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
+			<a class="btn btn-primary" href="/#!/teams/{{team._id}}/edit">
+				<i class="glyphicon glyphicon-edit"></i>
+			</a>
+			<a class="btn btn-primary" data-ng-click="remove();">
+				<i class="glyphicon glyphicon-trash"></i>
+			</a>
+		</div>
+	</div>
+
+	<pre>{{team}}</pre>
+
+	<div class="col-md-6">
 		<form class="form-horizontal" data-ng-submit="addMember()" novalidate>
 			<fieldset>
 				<div class="form-group">
@@ -43,30 +46,111 @@
 				</div>
 			</fieldset>
 		</form>
-	</div>
 
+		<div class="page-header">
+			<h1>Mitglieder von {{team.name}}</h1>
+		</div>
 
-	<div class="page-header">
-		<h1>Mitglieder von {{team.name}}</h1>
-	</div>
+		<div class="list-group" data-ng-controller="MembersController">
+			<div class="panel panel-primary" data-ng-repeat="member in team.members | orderBy : created">
+				<div class="panel-heading">
+					<h2 class="panel-title">{{member.firstname}} {{member.lastname}}</h2>
+				</div>
+				<pre>{{member}}</pre>
+				<div class="panel-body">
+					<h5 data-ng-bind=""></h5>
 
-	<div class="list-group" data-ng-controller="MembersController">
-		<div class="panel panel-primary" data-ng-repeat="member in team.members | orderBy : created">
-			<div class="panel-heading">
-				<h2 class="panel-title">{{member.firstname}} {{member.lastname}}</h2>
+					<div class="pull-right"
+						 data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
+						<a class="btn btn-primary" href="/#!/team/{{team._id}}/members/{{member._id}}/edit">
+							<i class="glyphicon glyphicon-edit"></i>
+						</a>
+						<a class="btn btn-primary" data-ng-click="remove(member);">
+							<i class="glyphicon glyphicon-trash"></i>
+						</a>
+					</div>
+				</div>
 			</div>
-			{{member}}
-			<div class="panel-body">
-				<h5 data-ng-bind=""></h5>
+		</div>
+	</div>
 
-				<div class="pull-right"
-					 data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
-					<a class="btn btn-primary" href="/#!/team/{{team._id}}/members/{{member._id}}/edit">
-						<i class="glyphicon glyphicon-edit"></i>
+
+	<div class="col-md-6" data-ng-controller="BuddyeventsController">
+		<form class="form-horizontal" data-ng-submit="add()" novalidate>
+			<fieldset>
+				<div class="form-group">
+					<div class="controls">
+						<input type="text" data-ng-model="title" id="title" class="form-control" placeholder="Titel"
+							   required>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="controls">
+						<input type="text" data-ng-model="description" id="description" class="form-control"
+							   placeholder="Beschreibung" required>
+					</div>
+				</div>
+
+				<div class="dropdown form-group">
+					<a class="dropdown-toggle js-toggle-dateFrom" id="dLabel" role="button" data-toggle="dropdown"
+					   data-target="#" href="">
+						<div class="input-append">
+							<input type="text" class="form-control" placeholder="Von" data-ng-model="data.from">
+							<span class="add-on"><i class="glyphicon glyphicon-calendar"></i></span>
+						</div>
 					</a>
-					<a class="btn btn-primary" data-ng-click="remove(member);">
-						<i class="glyphicon glyphicon-trash"></i>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<datetimepicker data-ng-model="data.from"
+										data-datetimepicker-config="{ dropdownSelector: '.js-toggle-dateFrom' }"></datetimepicker>
+					</ul>
+				</div>
+
+				<div class="dropdown form-group">
+					<a class="dropdown-toggle js-toggle-dateTo" id="dLabel" role="button" data-toggle="dropdown"
+					   data-target="#" href="">
+						<div class="input-append">
+							<input type="text" class="form-control" placeholder="Bis" data-ng-model="data.to">
+							<span class="add-on"><i class="glyphicon glyphicon-calendar"></i></span>
+						</div>
 					</a>
+					<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+						<datetimepicker data-ng-model="data.to"
+										data-datetimepicker-config="{ dropdownSelector: '.js-toggle-dateTo' }"></datetimepicker>
+					</ul>
+				</div>
+
+				<div class="form-group">
+					<input type="submit" class="btn btn-primary" value="Event hinzufügen">
+				</div>
+				<div data-ng-show="error" class="text-danger">
+					<strong data-ng-bind="error"></strong>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+
+	<div class="col-md-6">
+		<div class="page-header">
+			<h1>Events von {{team.name}}</h1>
+		</div>
+
+		<div class="list-group">
+			<div class="panel panel-primary" data-ng-repeat="buddyevent in team.buddyevents | orderBy : created">
+				<div class="panel-heading">
+					<h2 class="panel-title">{{buddyevent.title}}</h2>
+				</div>
+				<div class="panel-body">
+					<h4>{{buddyevent.description}}</h4>
+					<p>Von: {{buddyevent.from | date: "dd. MMM yyyy, HH.mm"}} Uhr </p>
+					<p>Bis: {{buddyevent.to | date: "dd. MMM yyyy, HH.mm"}} Uhr</p>
+					<div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
+						<a class="btn btn-primary" href="/#!/buddyevents/{{buddyevent._id}}/edit">
+							<i class="glyphicon glyphicon-edit"></i>
+						</a>
+						<a class="btn btn-primary" data-ng-click="remove(buddyevent);">
+							<i class="glyphicon glyphicon-trash"></i>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>

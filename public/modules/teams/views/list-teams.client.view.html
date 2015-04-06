@@ -35,12 +35,12 @@
     <div class="list-group">
         <div class="panel panel-primary" data-ng-repeat="team in teams">
             <div class="panel-heading">
-                <a href="/#!/team/{{team._id}}"><h2 class="panel-title" data-ng-bind="team.name"></h2></a>
+                <a href="/#!/teams/{{team._id}}"><h2 class="panel-title" data-ng-bind="team.name"></h2></a>
             </div>
             <div class="panel-body">
                 <h5 data-ng-bind="team.description"></h5>
                 <div class="pull-right" data-ng-show="((authentication.user) && (authentication.user._id == team.user._id))">
-                    <a class="btn btn-primary" href="/#!/team/{{team._id}}/edit">
+                    <a class="btn btn-primary" href="/#!/teams/{{team._id}}/edit">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
                     <a class="btn btn-primary" data-ng-click="remove(team);">

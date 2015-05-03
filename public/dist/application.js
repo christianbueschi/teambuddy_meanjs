@@ -612,11 +612,11 @@ angular.module('teams').config(['$stateProvider',
 			templateUrl: 'modules/teams/views/create-team.client.view.html'
 		}).
 		state('viewTeam', {
-			url: '/team/:teamId',
+			url: '/teams/:teamId',
 			templateUrl: 'modules/teams/views/view-team.client.view.html'
 		}).
 		state('editTeam', {
-			url: '/team/:teamId/edit',
+			url: '/teams/:teamId/edit',
 			templateUrl: 'modules/teams/views/edit-team.client.view.html'
 		});
 	}
@@ -650,6 +650,44 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 			});
 		};
 
+		// $scope.createMember = function() {
+		// 	var user =  new Users ({
+		// 		firstName: this.firstName,
+		// 		lastName: this.lastName
+		// 	});
+		// 	console.log(user);
+
+		// 	user.$save(function(res) {
+		// 		$location.path('teams');
+		// 	}, function(error) {
+		// 		console.log(error);
+		// 	});
+
+		// };
+
+		$scope.addMember = function() {
+
+			var member = {
+				firstname: this.firstname,
+				lastname: this.lastname,
+				email: this.email,
+				password: 'password'
+			};
+
+			var team = $scope.team;
+			team.members.push(member);
+
+			console.log(team);
+
+			team.$update(function() {
+				$location.path('team/' + team._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+
+
+		};
+
 		// Update existing Team
 		$scope.add = function() {
 
@@ -657,8 +695,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 			var team = this.team;
 
 			var member = {
-				firstname: this.firstname,
-				lastname: this.lastname
+				firstName: this.firstName,
+				lastName: this.lastName
 			};
 
 			team.members.push(member);
@@ -666,9 +704,8 @@ angular.module('teams').controller('TeamsController', ['$scope', '$stateParams',
 			var _this = this;
 
 			team.$update(function() {
-				_this.firstname = '';
-				_this.lastname = '';
-
+				_this.firstName = '';
+				_this.lastName = '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -806,6 +843,10 @@ angular.module('users').config(['$stateProvider',
 		state('reset', {
 			url: '/password/reset/:token',
 			templateUrl: 'modules/users/views/password/reset-password.client.view.html'
+		}).
+		state('create', {
+			url: '/team/:teamId/members/create',
+			templateUrl: 'modules/users/views/create-user.client.view.html'
 		});
 	}
 ]);
@@ -957,6 +998,40 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 			});
 		};
 	}
+]);
+'use strict';
+
+angular.module('users').controller('UsersController', ['$scope', '$http', '$location', '$stateParams', 'Users', 'Authentication', 'Teams',
+	function($scope, $http, $location, $stateParams, Users, Authentication, Teams) {
+
+		$scope.user = Authentication.user;
+
+		var Team = Teams.get({ 
+			teamId: $stateParams.teamId
+		});
+
+
+		console.log(Team);
+
+		$scope.createMember = function() {
+
+			var Member = new Users({
+				firstName: this.firstName,
+				lastName: this.lastName,
+				email: this.email,
+				team: Team._id
+			});
+
+			Member.$save(function(res) {
+
+			}, function(error) {
+				console.log(error);
+			}) ;
+
+		};
+
+	}
+
 ]);
 'use strict';
 
